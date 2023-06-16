@@ -61,4 +61,14 @@ export default class Cart {
 		this.toBuyBooks = toBuyBooks;
 		this.calculate();
 	}
+
+	public addToBuyBook(toBuyBooks: ToBuyBook) {
+		this.toBuyBooks.push(toBuyBooks);
+		this.calculate();
+	}
+	public rmToBuyBook(toBuyBooks: ToBuyBook) {
+		const index = this.toBuyBooks.indexOf(toBuyBooks);
+		this.toBuyBooks.splice(index, 1);
+		this.calculate();
+	}
 }
