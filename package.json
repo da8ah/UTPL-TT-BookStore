@@ -1,6 +1,6 @@
 {
   "name": "utpl-tt-bookstore",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "BookStore Backend App",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
       }
     },
     "testMatch": [
-      "**/__tests__/*.+(ts|tsx|js)"
+      "**/__tests__/**/*.+(ts|tsx|js)"
     ]
   },
   "repository": {
