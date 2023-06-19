@@ -4,27 +4,21 @@ import Client from "../../entities/Client";
 import IPersistenciaClient from "../../ports/persistencia/IPersistenciaClient";
 
 export default class GestionDeCuentaClient {
-	public static actualizarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client, originalClientToChangeUsername?: Client): Client {
-		let clientUpdated;
-		if (originalClientToChangeUsername !== undefined) clientUpdated = iPersistenciaClient.actualizarCuenta(client, originalClientToChangeUsername) as Client;
-		else clientUpdated = iPersistenciaClient.actualizarCuenta(client) as Client;
-		clientUpdated.setPassword("");
-		return clientUpdated;
+	public static actualizarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client, originalClientToChangeUsername?: Client): Promise<boolean> {
+		return originalClientToChangeUsername !== undefined ? iPersistenciaClient.actualizarCuenta(client, originalClientToChangeUsername) : iPersistenciaClient.actualizarCuenta(client);
 	}
 
-	public static actualizarBillingInfo(iPersistenciaClient: IPersistenciaClient, client: Client, billingInfo: BillingInfo): boolean {
+	public static actualizarBillingInfo(iPersistenciaClient: IPersistenciaClient, client: Client, billingInfo: BillingInfo): Promise<boolean> {
 		return iPersistenciaClient.actualizarBillingInfo(client, billingInfo);
 	}
-	public static agregarCard(iPersistenciaClient: IPersistenciaClient, client: Client, card: Card): boolean {
+	public static agregarCard(iPersistenciaClient: IPersistenciaClient, client: Client, card: Card): Promise<boolean> {
 		return iPersistenciaClient.agregarCard(client, card);
 	}
-	public static eliminarCard(iPersistenciaClient: IPersistenciaClient, client: Client, card: Card): boolean {
+	public static eliminarCard(iPersistenciaClient: IPersistenciaClient, client: Client, card: Card): Promise<boolean> {
 		return iPersistenciaClient.eliminarCard(client, card);
 	}
 
-	public static eliminarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client): Client {
-		const clientDeleted = iPersistenciaClient.eliminarCuenta(client) as Client;
-		clientDeleted.setPassword("");
-		return clientDeleted;
+	public static eliminarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client): Promise<boolean> {
+		return iPersistenciaClient.eliminarCuenta(client);
 	}
 }

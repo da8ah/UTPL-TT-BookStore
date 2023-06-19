@@ -10,33 +10,38 @@ import IPersistenciaTransacciones from "../../ports/persistencia/IPersistenciaTr
 import GestionDeLibros from "../admin/GestionDeLibros";
 
 export default class TransaccionesDelClient {
-	public static pagarCarrito(iPago: IPago, cart: Cart) {
+	public static pagarCarrito(iPago: IPago, cart: Cart): Promise<boolean> {
 		return iPago.procesarPago(cart);
 	}
 
-	public static registrarTransaccion(
+	public static async registrarTransaccion(
 		card: Card,
 		client: Client,
 		cart: Cart,
 		iPersistenciaLibro: IPersistenciaLibro,
 		iPersistenciaTransacciones: IPersistenciaTransacciones,
 		iPersistenciaClient: IPersistenciaClient,
-	): Client {
+	): Promise<Client> {
 		try {
-			// 1. RESERVAR LIBROS DEL STOCK DISPONIBLE
+			// 1. RESTAR LIBROS DEL STOCK DISPONIBLE
 			const boughtBooks: ToBuyBook[] = [];
 			for (const toBuyBook of cart.getToBuyBooks()) {
-				const stockBook = iPersistenciaLibro.buscarUnLibroPorISBN(toBuyBook.getIsbn());
+				const stockBook = await iPersistenciaLibro.buscarUnLibroPorISBN(toBuyBook.getIsbn());
 				if (stockBook) {
-					if (stockBook.getStock() >= toBuyBook.getCant() && toBuyBook.getCant() > 0) {
-						stockBook.setStock(stockBook.getStock() - toBuyBook.getCant());
-						GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook);
-						boughtBooks.push(toBuyBook);
-					} else if (stockBook.getStock() < toBuyBook.getCant() && stockBook.getStock() > 0 && toBuyBook.getCant() > 0) {
-						toBuyBook.setCant(stockBook.getStock());
-						stockBook.setStock(0);
-						GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook);
-						boughtBooks.push(toBuyBook);
+					// CONTINUAR SI ALGÚN LIBRO NO SE ACTUALIZA
+					try {
+						if (stockBook.getStock() >= toBuyBook.getCant() && toBuyBook.getCant() > 0) {
+							stockBook.setStock(stockBook.getStock() - toBuyBook.getCant());
+							// Posible Error
+							if (await GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook)) boughtBooks.push(toBuyBook);
+						} else if (stockBook.getStock() < toBuyBook.getCant() && stockBook.getStock() > 0 && toBuyBook.getCant() > 0) {
+							toBuyBook.setCant(stockBook.getStock());
+							stockBook.setStock(0);
+							// Posible Error
+							if (await GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook)) boughtBooks.push(toBuyBook);
+						}
+					} catch (error) {
+						console.error(error);
 					}
 				}
 			}
@@ -53,21 +58,21 @@ export default class TransaccionesDelClient {
 			transaction.setDate(new Date().toLocaleDateString());
 			transaction.setPayment(cart.getTotalPrice());
 			transaction.setCart(cart);
-			iPersistenciaTransacciones.guardarTransaccionDeClient(transaction);
+			if (!(await iPersistenciaTransacciones.guardarTransaccionDeClient(transaction))) throw Error("Transaction was not saved!");
 
 			// 3. AGREGAR TRANSACCIÓN AL CLIENT
-			iPersistenciaClient.agregarTransaction(new Client(client.getUser(), "", "", "", ""), transaction);
+			if (!(await iPersistenciaClient.agregarTransaction(new Client(client.getUser(), "", "", "", ""), transaction))) throw Error("Transaction saved but is unrelated to the Client!");
 
 			// 4. RETORNAR CLIENT CON TRANSACCIONES ACTUALIZADAS
 			return this.listarMisTransacciones(client, iPersistenciaTransacciones);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			throw error;
 		}
 	}
 
-	public static listarMisTransacciones(client: Client, iPersistenciaTransacciones: IPersistenciaTransacciones): Client {
-		const transactions = iPersistenciaTransacciones.obtenerTransaccionesDeClient(new Client(client.getUser(), "", "", "", ""));
+	public static async listarMisTransacciones(client: Client, iPersistenciaTransacciones: IPersistenciaTransacciones): Promise<Client> {
+		const transactions = await iPersistenciaTransacciones.obtenerTransaccionesDeClient(new Client(client.getUser(), "", "", "", ""));
 		client.setTransactions(transactions);
 		return client;
 	}

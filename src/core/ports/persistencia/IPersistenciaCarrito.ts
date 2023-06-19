@@ -1,6 +1,6 @@
 import Cart from "../../entities/Cart";
 
 export default interface IPersistenciaCarrito {
-	guardarCarrito(cart: Cart): boolean;
-	recuperarCarrito(): Cart | null;
+	guardarCarrito(cart: Cart): Promise<boolean>;
+	recuperarCarrito(): Promise<Cart | null>;
 }

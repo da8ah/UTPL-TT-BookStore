@@ -10,7 +10,7 @@ import Client from "../../src/core/entities/Client";
 import StockBook from "../../src/core/entities/StockBook";
 import ToBuyBook from "../../src/core/entities/ToBuyBook";
 
-let admin: Admin;
+export let admin: Admin;
 let billingInfo: BillingInfo;
 let client: Client;
 let stockBook: StockBook;
@@ -61,42 +61,38 @@ beforeAll(() => {
 
 describe("Test Domain Use Cases", () => {
 	describe("Admin", () => {
-		it("should crearCuenta", () => {
-			const adminSaved = GestionDeAdmin.crearCuenta(iPersistenciaCuenta, admin);
-			expect(adminSaved).toEqual(new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", ""));
+		it("should crearCuenta", async () => {
+			expect(await GestionDeAdmin.crearCuenta(iPersistenciaCuenta, admin)).toEqual({ duplicado: false, creado: true });
 		});
 
-		it("should iniciarSesionConUserPassword", () => {
-			const adminFound = GestionDeAdmin.iniciarSesionConUserPassword(iPersistenciaCuenta, admin);
+		it("should iniciarSesionConUserPassword", async () => {
+			const adminFound = await GestionDeAdmin.iniciarSesionConUserPassword(iPersistenciaCuenta, admin);
 			expect(adminFound).toEqual(new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", ""));
 		});
 
-		it("should iniciarSesionConUser", () => {
-			const adminFound = GestionDeAdmin.iniciarSesionConUser(iPersistenciaCuenta, admin);
+		it("should iniciarSesionConUser", async () => {
+			const adminFound = await GestionDeAdmin.iniciarSesionConUser(iPersistenciaCuenta, admin);
 			expect(adminFound).toEqual(new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", ""));
 		});
 
-		it("should actualizarCuenta", () => {
-			const adminFound = GestionDeAdmin.actualizarCuenta(iPersistenciaCuenta, new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", "1234"));
-			expect(adminFound).toEqual(new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", ""));
+		it("should actualizarCuenta", async () => {
+			expect(await GestionDeAdmin.actualizarCuenta(iPersistenciaCuenta, new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", "1234"))).toBe(true);
 		});
 
-		it("should eliminarCuenta", () => {
-			const adminFound = GestionDeAdmin.eliminarCuenta(iPersistenciaCuenta, admin);
-			expect(adminFound).toEqual(new Admin("tiber", "tiber", "tiber@email.com", "+593000000000", ""));
+		it("should eliminarCuenta", async () => {
+			expect(await GestionDeAdmin.eliminarCuenta(iPersistenciaCuenta, admin)).toBe(true);
 		});
 	});
 
 	describe("Client", () => {
-		it("should crearCuenta", () => {
-			const clientSaved = GestionDeInicio.crearCuenta(iPersistenciaClient, client);
-			expect(clientSaved).toMatchObject({ user: "da8ah.tiber", name: "da8ah.tiber", email: "da8ah.tiber@email.com", mobile: "+593000000001", password: "" });
+		it("should crearCuenta", async () => {
+			expect(await GestionDeInicio.crearCuenta(iPersistenciaClient, client)).toEqual({ duplicado: false, creado: true });
 		});
 	});
 
 	describe("Inicio", () => {
-		it("should fetch all Visible StockBooks", () => {
-			const books = GestionDeInicio.listarCatalogoDeLibrosVisibles(iPersistenciaLibro);
+		it("should fetch all Visible StockBooks", async () => {
+			const books = await GestionDeInicio.listarCatalogoDeLibrosVisibles(iPersistenciaLibro);
 			expect(books).toEqual([
 				new StockBook(
 					"9780141988511",

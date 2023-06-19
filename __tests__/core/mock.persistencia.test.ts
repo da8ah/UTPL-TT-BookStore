@@ -8,95 +8,91 @@ import IPersistenciaClient from "../../src/core/ports/persistencia/IPersistencia
 import IPersistenciaCuenta from "../../src/core/ports/persistencia/IPersistenciaCuenta";
 import IPersistenciaLibro from "../../src/core/ports/persistencia/IPersistenciaLibro";
 
+import { admin as adminTest } from "./core.usecases.test";
+
 export const iPersistenciaCuenta: IPersistenciaCuenta = {
-	guardarCuentaNueva: function (admin: Admin): Admin {
-		if (admin.getUser() === "") return new Admin("", "", "", "", "");
-		if (admin.getName() === "") return new Admin("", "", "", "", "");
-		if (admin.getEmail() === "") return new Admin("", "", "", "", "");
-		if (admin.getMobile() === "") return new Admin("", "", "", "", "");
-		if (admin.getPassword() === "") return new Admin("", "", "", "", "");
-		return admin;
+	guardarCuentaNueva: async (admin: Admin): Promise<boolean> => {
+		if (admin.getUser() === "") return false;
+		if (admin.getName() === "") return false;
+		if (admin.getEmail() === "") return false;
+		if (admin.getMobile() === "") return false;
+		if (admin.getPassword() === "") return false;
+		return true;
 	},
-	obtenerCuenta: function (admin: Admin): Admin | null {
+	comprobarCuentaDuplicada: async (admin: Admin): Promise<boolean> => {
+		return false;
+	},
+	obtenerCuenta: async (admin: Admin): Promise<Admin | null> => {
 		if (admin.getUser() === "") return null;
-		if (admin.getName() === "") return null;
-		if (admin.getEmail() === "") return null;
-		if (admin.getMobile() === "") return null;
-		if (admin.getPassword() === "") return null;
-		return admin;
+		return adminTest;
 	},
-	actualizarCuenta: function (admin: Admin, originalAdminToChangeUsername?: Admin | undefined): Admin {
-		if (originalAdminToChangeUsername !== undefined) admin.setUser(originalAdminToChangeUsername.getUser());
-		return admin;
-	},
-	eliminarCuenta: function (admin: Admin): Admin {
-		return admin;
-	},
-	compararPassword: function (admin: Admin): boolean {
+	comprobarUserPassword: async (admin: Admin): Promise<boolean> => {
 		if (admin.getUser() === "") return false;
 		if (admin.getPassword() === "") return false;
+		return true;
+	},
+	actualizarCuenta: async (admin: Admin, originalAdminToChangeUsername?: Admin | undefined): Promise<boolean> => {
+		if (originalAdminToChangeUsername !== undefined) admin.setUser(originalAdminToChangeUsername.getUser());
+		return true;
+	},
+	eliminarCuenta: async (admin: Admin): Promise<boolean> => {
 		return true;
 	},
 };
 
 export const iPersistenciaClient: IPersistenciaClient = {
-	guardarCuentaNueva: function (client: Client): Client {
-		if (client.getUser() === "") return new Client("", "", "", "", "");
-		if (client.getName() === "") return new Client("", "", "", "", "");
-		if (client.getEmail() === "") return new Client("", "", "", "", "");
-		if (client.getMobile() === "") return new Client("", "", "", "", "");
-		if (client.getPassword() === "") return new Client("", "", "", "", "");
-		return client;
+	guardarCuentaNueva: async (client: Client): Promise<boolean> => {
+		if (client.getUser() === "") return false;
+		if (client.getName() === "") return false;
+		if (client.getEmail() === "") return false;
+		if (client.getMobile() === "") return false;
+		if (client.getPassword() === "") return false;
+		return true;
 	},
-	obtenerCuenta: function (client: Client): Client | null {
+	comprobarCuentaDuplicada: async (client: Client): Promise<boolean> => {
+		return false;
+	},
+	obtenerCuenta: async (client: Client): Promise<Client | null> => {
 		if (client.getUser() === "") return null;
-		if (client.getName() === "") return null;
-		if (client.getEmail() === "") return null;
-		if (client.getMobile() === "") return null;
-		if (client.getPassword() === "") return null;
 		return client;
 	},
-	actualizarCuenta: function (client: Client, originalClientToChangeUsername?: Client | undefined): Client {
-		if (originalClientToChangeUsername !== undefined) client.setUser(originalClientToChangeUsername.getUser());
-		return client;
-	},
-	eliminarCuenta: function (client: Client): Client {
-		return client;
-	},
-	compararPassword: function (client: Client): boolean {
+	comprobarUserPassword: async (client: Client): Promise<boolean> => {
 		if (client.getUser() === "") return false;
 		if (client.getPassword() === "") return false;
 		return true;
 	},
-
-	actualizarBillingInfo: function (client: Client, billingInfo: BillingInfo): boolean {
-		throw new Error("Function not implemented.");
+	actualizarCuenta: async (client: Client, originalClientToChangeUsername?: Client | undefined): Promise<boolean> => {
+		if (originalClientToChangeUsername !== undefined) client.setUser(originalClientToChangeUsername.getUser());
+		return true;
 	},
-	agregarCard: function (client: Client, card: Card): boolean {
-		throw new Error("Function not implemented.");
+	eliminarCuenta: async (client: Client): Promise<boolean> => {
+		return true;
 	},
-	eliminarCard: function (client: Client, card: Card): boolean {
-		throw new Error("Function not implemented.");
+	actualizarBillingInfo: async (client: Client, billingInfo: BillingInfo): Promise<boolean> => {
+		throw new Error("async not implemented.");
 	},
-	agregarTransaction: function (client: Client, transaction: Transaction): boolean {
+	agregarCard: async (client: Client, card: Card): Promise<boolean> => {
+		throw new Error("async not implemented.");
+	},
+	eliminarCard: async (client: Client, card: Card): Promise<boolean> => {
+		throw new Error("async not implemented.");
+	},
+	agregarTransaction: async (client: Client, transaction: Transaction): Promise<boolean> => {
 		throw new Error("Function not implemented.");
 	},
 };
 
 export const iPersistenciaLibro: IPersistenciaLibro = {
-	buscarUnLibroPorISBN: function (isbn: string): StockBook | null {
+	buscarUnLibroPorISBN: function (isbn: string): Promise<StockBook | null> {
 		throw new Error("Function not implemented.");
 	},
-	filtrarLibros: function (searchString: String): StockBook[] {
+	guardarLibroNuevo: function (stockBook: StockBook): Promise<boolean> {
 		throw new Error("Function not implemented.");
 	},
-	guardarLibroNuevo: function (stockBook: StockBook): StockBook {
+	obtenerLibrosEnStock: function (): Promise<StockBook[]> {
 		throw new Error("Function not implemented.");
 	},
-	obtenerLibrosEnStock: function (): StockBook[] {
-		throw new Error("Function not implemented.");
-	},
-	obtenerLibrosVisibles: function (): StockBook[] {
+	obtenerLibrosVisibles: async (): Promise<StockBook[]> => {
 		return [
 			new StockBook(
 				"9780141988511",
@@ -118,10 +114,10 @@ export const iPersistenciaLibro: IPersistenciaLibro = {
 			),
 		];
 	},
-	actualizarLibro: function (stockBook: StockBook, originalStockBookToChangeISBN?: StockBook | undefined): StockBook {
+	actualizarLibro: function (stockBook: StockBook, originalStockBookToChangeISBN?: StockBook | undefined): Promise<boolean> {
 		throw new Error("Function not implemented.");
 	},
-	eliminarLibro: function (stockBook: StockBook): StockBook {
+	eliminarLibro: function (stockBook: StockBook): Promise<boolean> {
 		throw new Error("Function not implemented.");
 	},
 };
