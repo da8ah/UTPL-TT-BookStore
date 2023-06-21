@@ -1,5 +1,5 @@
-import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcrypt";
+import { Document, Schema, model } from "mongoose";
 
 export interface IAdminModel extends Document {
 	user: string;

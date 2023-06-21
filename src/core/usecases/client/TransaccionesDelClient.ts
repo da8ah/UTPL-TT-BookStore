@@ -47,6 +47,7 @@ export default class TransaccionesDelClient {
 					}
 				}
 			}
+			if (boughtBooks.length === 0) return []; // if (boughtBooks = empty) return []
 			cart.setToBuyBooks(boughtBooks);
 
 			// 2. REGISTRAR NUEVA TRANSACCIÓN

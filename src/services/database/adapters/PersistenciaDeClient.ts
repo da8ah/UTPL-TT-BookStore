@@ -72,7 +72,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 		try {
 			return !!(await ClientModel.findOneAndUpdate(
 				{ user: client.getUser().toLowerCase() },
-				{ $push: { cards: { card } } },
+				{ $addToSet: { cards: card } },
 				{
 					new: true,
 				},
@@ -87,7 +87,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 		try {
 			return !!(await ClientModel.findOneAndUpdate(
 				{ user: client.getUser().toLowerCase() },
-				{ $pop: { cards: { cardNumber: card.getCardNumber() } } },
+				{ $pull: { cards: { cardNumber: card.getCardNumber() } } },
 				{
 					new: true,
 				},

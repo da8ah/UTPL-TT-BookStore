@@ -7,7 +7,7 @@ export default class GestionDelCarrito {
 		return iPersistenciaCarrito.guardarCarrito(cart);
 	}
 
-	public static asyncrecuperarCarrito(iPersistenciaCarrito: IPersistenciaCarrito): Promise<Cart> | null {
+	public static asyncrecuperarCarrito(iPersistenciaCarrito: IPersistenciaCarrito): Promise<Cart | null> {
 		return iPersistenciaCarrito.recuperarCarrito();
 	}
 

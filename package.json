@@ -1,6 +1,6 @@
 {
   "name": "utpl-tt-bookstore",
-  "version": "0.2.1",
+  "version": "0.4.1",
   "description": "BookStore Backend App",
   "main": "index.js",
   "scripts": {

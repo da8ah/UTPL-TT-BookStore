@@ -122,8 +122,7 @@ const clientSchema = new Schema(
 		},
 		cards: [
 			{
-				_id: false,
-				types: cardSchema,
+				type: cardSchema,
 			},
 		],
 		transactions: [
@@ -143,7 +142,7 @@ const clientSchema = new Schema(
 	},
 );
 
-cardSchema.pre<ICardModel>("save", async function (next) {
+cardSchema.pre<ICardModel>("findOneAndUpdate", async function (next) {
 	const card = this;
 	console.log(card);
 
