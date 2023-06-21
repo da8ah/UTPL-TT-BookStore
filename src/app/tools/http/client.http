@@ -1,0 +1,148 @@
+###
+@port = 8080
+@api = http://localhost:{{port}}
+
+### CLIENT
+@auth=
+@clients={{api}}/api/clients
+# @user=tiber
+@user=da8ah.tiber
+
+### GET CLIENT WITH TOKEN
+GET {{clients}}/signin
+Authorization: {{auth}}
+
+### UPDATE CLIENT
+PUT {{clients}}/{{user}}
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "user": "da8ah.tiber",
+    "name": "Danilo Ochoa Hidalgo",
+    "email": "danilo.ochoa.hidalgo@email.com",
+    "mobile": "+593000000001",
+    "password": "tibernuncamuere",
+    "billingInfo": {
+        "toWhom": "Danilo Ochoa Hidalgo",
+        "ci": "1000000001",
+        "provincia": "Loja",
+        "ciudad": "Loja",
+        "numCasa": "000",
+        "calles": "Principal y Secundaria"
+    }
+}
+
+### DELETE CLIENT
+DELETE {{clients}}/{{user}}
+Authorization: {{auth}}
+
+
+
+### BILLING INFO
+### UPDATE BILLING INFO
+PUT {{clients}}/{{user}}/billing
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "toWhom": "Danilo Ochoa Hidalgo",
+    "ci": "1000000001",
+    "provincia": "Loja",
+    "ciudad": "Loja",
+    "numCasa": "000",
+    "calles": "Principal y Secundaria"
+}
+
+### CARDS
+### ADD CARD
+PUT {{clients}}/{{user}}/cards
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "ownerName": "Danilo Ochoa Hidalgo",
+    "cardNumber": "1111000011110000",
+    "code": "123",
+    "expiryDate": "10/26"
+}
+
+### RM CARD
+DELETE {{clients}}/{{user}}/cards
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "cardNumber": "1111000011110000"
+}
+
+### TRANSACTIONS
+@payment={{clients}}/payments
+@transactions={{clients}}/transactions
+
+### GET STRIPE PUBLIC KEY
+GET {{payment}}
+Authorization: {{auth}}
+
+### RETRIEVE ALL TRANSACTIONS OF A CLIENT
+GET {{transactions}}/{{user}}
+Authorization: {{auth}}
+
+### CREATE NEW TRANSACTION AND ADD TO THE CLIENT
+POST {{transactions}}
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "cardNumber": "1234567890101",
+    "user": "da8ah.tiber",
+    "name": "Danilo Ochoa Hidalgo",
+    "email": "danilo.ochoa.hidalgo@email.com",
+    "mobile": "+593000000001",
+    "date": "1/19/2023",
+    "payment": 25,
+    "cart": {
+        "discountCalc": 2.5,
+        "ivaCalc": 3,
+        "subtotal": 75.5,
+        "totalPrice": 78,
+        "toBuyBooks": [
+            {
+                "isbn": "9780141988511",
+                "imgRef": "https://azure.blob.url",
+                "title": "12 Rules for Life: An Antidote to Chaos",
+                "author": "Peterson, Jordan B.",
+                "releaseDate": "5/12/2018",
+                "grossPricePerUnit": 25,
+                "inOffer": false,
+                "discountPercentage": 0,
+                "hasIva": false,
+                "ivaPercentage": 0,
+                "discountedAmount": 0,
+                "ivaAmount": 0,
+                "priceWithDiscount": 25,
+                "priceWithIva": 25,
+                "cant": 1,
+                "priceCalcPerUnit": 25
+            },
+            {
+                "isbn": "9780141988512",
+                "imgRef": "https://azure.blob.url",
+                "title": "12 More Rules for Life: Beyond Order",
+                "author": "Peterson, Jordan B.",
+                "releaseDate": "5/16/2020",
+                "grossPricePerUnit": 25,
+                "inOffer": true,
+                "discountPercentage": 10,
+                "hasIva": true,
+                "ivaPercentage": 12,
+                "discountedAmount": 2.5,
+                "ivaAmount": 3,
+                "priceWithDiscount": 22.5,
+                "priceWithIva": 28,
+                "cant": 2,
+                "priceCalcPerUnit": 25.5
+            }
+        ]
+    }
+}

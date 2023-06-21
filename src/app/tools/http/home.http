@@ -1,0 +1,46 @@
+###
+@port = 8080
+@api = http://localhost:{{port}}
+
+### LOGIN CLIENT
+POST {{api}}/signin
+Content-Type: application/json
+
+{
+  "user": "da8ah.tiber",
+  "password": "tibernuncamuere"
+}
+
+### CREATE CLIENT
+POST {{api}}/signup
+Content-Type: application/json
+
+{
+    "user": "da8ah.tiber",
+    "name": "Danilo Ochoa Hidalgo",
+    "email": "danilo.ochoa.hidalgo@email.com",
+    "mobile": "+593000000001",
+    "password": "tibernuncamuere",
+    "billingInfo": {
+      "toWhom": "Danilo Ochoa Hidalgo",
+      "ci": "1000000001",
+      "provincia": "Loja",
+      "ciudad": "Loja",
+      "numCasa": "000",
+      "calles": "Principal y Secundaria"
+    }
+}
+
+
+
+### BOOKS
+@books={{api}}/api/books
+
+### GET ALL BOOKS
+GET {{books}}
+
+###
+@search = bestseller
+
+### GET BOOK BY STRING
+GET {{books}}/{{search}}

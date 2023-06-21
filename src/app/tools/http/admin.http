@@ -1,0 +1,119 @@
+###
+@port = 8080
+@api = http://localhost:{{port}}
+
+### ADMIN
+@auth=
+@admin={{api}}/api/admin
+@user=tiber
+
+### LOGIN ADMIN
+POST {{admin}}/login
+Content-Type: application/json
+
+{
+  "user": "tiber",
+  "password": "tiber"
+}
+
+### GET ADMIN WITH TOKEN
+GET {{admin}}/login
+Authorization: {{auth}}
+
+### CREATE ADMIN
+POST {{admin}}/newuser
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "user": "tiber",
+    "name": "da8ah",
+    "email": "tiber@email.com",
+    "mobile": "+593000000001",
+    "password": "tiber"
+}
+
+### UPDATE ADMIN
+PUT {{admin}}/{{user}}
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+    "user": "tiber",
+    "name": "da8ah"    
+}
+
+
+
+### BOOKS
+@books={{admin}}/books
+
+### GET ALL BOOKS
+GET {{books}}
+Authorization: {{auth}}
+
+### CREATE BOOK
+POST {{books}}
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "isbn": "9780141988511",
+  "imgRef": "https://azure.blob.png",
+  "title": "12 Rules for Life: An Antidote to Chaos",
+  "author": "Peterson, Jordan B.",
+  "releaseDate": "5/12/2018",
+  "createdDate": "10/1/2023",
+  "description": "JBP's BestSeller",
+  "grossPricePerUnit": 25,
+  "inOffer": true,
+  "discountPercentage": 25,
+  "hasIva": false,
+  "ivaPercentage": 0,
+  "stock": 100,
+  "visible": true,
+  "recommended": true,
+  "bestSeller": true,
+  "recent": false
+}
+
+###
+@isbn = 9780141988511
+
+### UPDATE BOOK
+PUT {{books}}/{{isbn}}
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "isbn": "9780141988511",
+    "imgRef": "https://azure.blob.png",
+    "title": "12 Rules for Life: An Antidote to Chaos",
+    "author": "Peterson, Jordan B.",
+    "releaseDate": "5/12/2018",
+    "createdDate": "1/10/2023",
+    "description": "THE MULTI-MILLION COPY BESTSELLER",
+    "grossPricePerUnit": 25,
+    "inOffer": true,
+    "discountPercentage": 25,
+    "hasIva": true,
+    "ivaPercentage": 12,
+    "stock": 100,
+    "visible": true,
+    "recommended": true,
+    "bestSeller": true,
+    "recent": false
+}
+
+### DELETE BOOK
+DELETE {{books}}/{{isbn}}
+Authorization: {{auth}}
+
+
+
+### TRANSACTIONS
+@transactions={{admin}}/transactions
+
+### RETRIEVE ALL TRANSACTIONS
+GET {{transactions}}
+Authorization: {{auth}}
