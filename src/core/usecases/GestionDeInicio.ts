@@ -13,7 +13,7 @@ export default class GestionDeInicio {
 		return (await iPersistenciaClient.guardarCuentaNueva(client)) ? { duplicado: false, creado: true } : { duplicado: false, creado: false };
 	}
 
-	public static async iniciarSesionConUserPassword(iPersistenciaClient: IPersistenciaClient, client: Client): Promise<Client> {
+	public static async iniciarSesionConUserPassword(iPersistenciaClient: IPersistenciaClient, client: Client): Promise<Client | null> {
 		if (await iPersistenciaClient.comprobarUserPassword(new Client(client.getUser(), "", "", "", client.getPassword()))) {
 			const clientFound = (await iPersistenciaClient.obtenerCuenta(new Client(client.getUser(), "", "", "", ""))) as Client;
 			if (clientFound) {
@@ -21,15 +21,15 @@ export default class GestionDeInicio {
 				return clientFound;
 			}
 		}
-		return new Client("", "", "", "", "");
+		return null;
 	}
 
-	public static async iniciarSesionConUser(iPersistenciaClient: IPersistenciaClient, client: Client): Promise<Client> {
+	public static async iniciarSesionConUser(iPersistenciaClient: IPersistenciaClient, client: Client): Promise<Client | null> {
 		const clientFound = (await iPersistenciaClient.obtenerCuenta(new Client(client.getUser(), "", "", "", ""))) as Client;
 		if (clientFound) {
 			clientFound.setPassword("");
 			return clientFound;
 		}
-		return new Client("", "", "", "", "");
+		return null;
 	}
 }

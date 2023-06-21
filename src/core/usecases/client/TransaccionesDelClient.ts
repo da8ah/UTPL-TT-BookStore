@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import Card from "../../entities/Card";
 import Cart from "../../entities/Cart";
 import Client from "../../entities/Client";
@@ -8,6 +9,7 @@ import IPersistenciaClient from "../../ports/persistencia/IPersistenciaClient";
 import IPersistenciaLibro from "../../ports/persistencia/IPersistenciaLibro";
 import IPersistenciaTransacciones from "../../ports/persistencia/IPersistenciaTransacciones";
 import GestionDeLibros from "../admin/GestionDeLibros";
+import Transaction from "../../entities/Transaction";
 
 export default class TransaccionesDelClient {
 	public static pagarCarrito(iPago: IPago, cart: Cart): Promise<boolean> {
@@ -15,13 +17,13 @@ export default class TransaccionesDelClient {
 	}
 
 	public static async registrarTransaccion(
+		iPersistenciaClient: IPersistenciaClient,
+		iPersistenciaLibro: IPersistenciaLibro,
+		iPersistenciaTransacciones: IPersistenciaTransacciones,
 		card: Card,
 		client: Client,
 		cart: Cart,
-		iPersistenciaLibro: IPersistenciaLibro,
-		iPersistenciaTransacciones: IPersistenciaTransacciones,
-		iPersistenciaClient: IPersistenciaClient,
-	): Promise<Client> {
+	): Promise<Transaction[]> {
 		try {
 			// 1. RESTAR LIBROS DEL STOCK DISPONIBLE
 			const boughtBooks: ToBuyBook[] = [];
@@ -64,16 +66,14 @@ export default class TransaccionesDelClient {
 			if (!(await iPersistenciaClient.agregarTransaction(new Client(client.getUser(), "", "", "", ""), transaction))) throw Error("Transaction saved but is unrelated to the Client!");
 
 			// 4. RETORNAR CLIENT CON TRANSACCIONES ACTUALIZADAS
-			return this.listarMisTransacciones(client, iPersistenciaTransacciones);
+			return this.listarMisTransacciones(iPersistenciaTransacciones, client);
 		} catch (error) {
 			console.error(error);
 			throw error;
 		}
 	}
 
-	public static async listarMisTransacciones(client: Client, iPersistenciaTransacciones: IPersistenciaTransacciones): Promise<Client> {
-		const transactions = await iPersistenciaTransacciones.obtenerTransaccionesDeClient(new Client(client.getUser(), "", "", "", ""));
-		client.setTransactions(transactions);
-		return client;
+	public static async listarMisTransacciones(iPersistenciaTransacciones: IPersistenciaTransacciones, client: Client): Promise<Transaction[]> {
+		return await iPersistenciaTransacciones.obtenerTransaccionesDeClient(new Client(client.getUser(), "", "", "", ""));
 	}
 }

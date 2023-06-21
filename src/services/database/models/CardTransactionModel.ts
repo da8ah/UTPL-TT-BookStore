@@ -29,9 +29,8 @@ export interface IToBuyClientModel extends Document {
 export interface ICardTransactionModel extends Document {
 	id: string;
 	date: string;
-	cardNumber: string;
 	payment: number;
-	change: number;
+	cardNumber: string;
 	client: IToBuyClientModel;
 	booksAcquired: IToBuyBookModel[];
 	discountCalc: number;
@@ -148,14 +147,14 @@ const cardTransactionSchema = new Schema(
 			required: true,
 			trim: true,
 		},
+		payment: {
+			type: Number,
+			required: true,
+		},
 		cardNumber: {
 			type: String,
 			required: true,
 			trim: true,
-		},
-		payment: {
-			type: Number,
-			required: true,
 		},
 		client: {
 			_id: false,

@@ -2,9 +2,9 @@ import StockBook from "../../entities/StockBook";
 import IPersistenciaLibro from "../../ports/persistencia/IPersistenciaLibro";
 
 export default class GestionDeLibros {
-	public static async crearLibro(iPersistenciaLibro: IPersistenciaLibro, stockBook: StockBook): Promise<boolean> {
-		if (await iPersistenciaLibro.buscarUnLibroPorISBN(stockBook.getIsbn())) return false;
-		return iPersistenciaLibro.guardarLibroNuevo(stockBook);
+	public static async crearLibro(iPersistenciaLibro: IPersistenciaLibro, stockBook: StockBook): Promise<{ duplicado: boolean; creado: boolean }> {
+		if (await iPersistenciaLibro.buscarUnLibroPorISBN(stockBook.getIsbn())) return { duplicado: true, creado: false };
+		return (await iPersistenciaLibro.guardarLibroNuevo(stockBook)) ? { duplicado: false, creado: true } : { duplicado: false, creado: false };
 	}
 
 	public static listarCatalogoDeLibrosEnStock(iPersistenciaLibro: IPersistenciaLibro): Promise<StockBook[]> {

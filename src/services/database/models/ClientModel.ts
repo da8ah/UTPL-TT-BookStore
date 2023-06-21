@@ -145,6 +145,8 @@ const clientSchema = new Schema(
 
 cardSchema.pre<ICardModel>("save", async function (next) {
 	const card = this;
+	console.log(card);
+
 	if (!(card.isModified("cardNumber") || card.isModified("code"))) return next();
 
 	const salt = await bcrypt.genSalt(10);

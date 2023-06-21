@@ -1,9 +1,13 @@
 import Admin from "../../../core/entities/Admin";
 import BillingInfo from "../../../core/entities/BillingInfo";
 import Card from "../../../core/entities/Card";
+import { CardTransaction } from "../../../core/entities/CardTransaction";
+import Cart from "../../../core/entities/Cart";
 import Client from "../../../core/entities/Client";
 import StockBook from "../../../core/entities/StockBook";
+import ToBuyBook from "../../../core/entities/ToBuyBook";
 import AdminModel, { IAdminModel } from "./AdminModel";
+import CardTransactionModel, { ICardTransactionModel } from "./CardTransactionModel";
 import ClientModel, { IBillingInfoModel, ICardModel, IClientModel } from "./ClientModel";
 import StockBookModel, { IStockBookModel } from "./StockBookModel";
 
@@ -90,5 +94,49 @@ export class BookCaster {
 			bestSeller: stockBook.isBestSeller(),
 			recent: stockBook.isRecent(),
 		});
+	}
+}
+
+export class TransactionCaster {
+	public static cardTransactionToModel(transaction: CardTransaction): ICardTransactionModel {
+		return new CardTransactionModel({
+			id: transaction.getId(),
+			date: transaction.getDate(),
+			payment: transaction.getPayment(),
+			cardNumber: transaction.getCardNumber(),
+			client: {
+				user: transaction.getUser(),
+				name: transaction.getName(),
+				email: transaction.getEmail(),
+				mobile: transaction.getMobile(),
+			},
+			booksAcquired: transaction.getCart()?.getToBuyBooks(),
+			discountCalc: transaction.getCart()?.getDiscountCalc(),
+			ivaCalc: transaction.getCart()?.getIvaCalc(),
+			subtotal: transaction.getCart()?.getSubtotal(),
+			totalPrice: transaction.getCart()?.getTotalPrice(),
+		});
+	}
+
+	public static modelToCardTransaction(cardTransactionModel: ICardTransactionModel): CardTransaction {
+		const books: ToBuyBook[] = cardTransactionModel.booksAcquired.map(
+			(book) => new ToBuyBook(book.isbn, book.imgRef, book.title, book.author, book.releaseDate, book.grossPricePerUnit, book.inOffer, book.discountPercentage, book.hasIva, book.cant),
+		);
+
+		const cart = new Cart(books);
+
+		const cardTransaction = new CardTransaction(
+			cardTransactionModel.id,
+			cardTransactionModel.cardNumber,
+			cardTransactionModel.client.user,
+			cardTransactionModel.client.name,
+			cardTransactionModel.client.user,
+			cardTransactionModel.client.mobile,
+			cardTransactionModel.date,
+			cardTransactionModel.payment,
+			cart,
+		);
+
+		return cardTransaction;
 	}
 }

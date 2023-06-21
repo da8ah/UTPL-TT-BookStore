@@ -48,6 +48,15 @@ const stockBookSchema = new Schema(
 			required: true,
 			trim: true,
 		},
+		createdDate: {
+			type: String,
+			required: true,
+		},
+		description: {
+			type: String,
+			required: true,
+			trim: true,
+		},
 		grossPricePerUnit: {
 			type: Number,
 			required: true,
@@ -67,15 +76,6 @@ const stockBookSchema = new Schema(
 		ivaPercentage: {
 			type: Number,
 			required: true,
-		},
-		createdDate: {
-			type: String,
-			required: true,
-		},
-		description: {
-			type: String,
-			required: true,
-			trim: true,
 		},
 		stock: {
 			type: Number,
