@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import Stripe from "stripe";
 import config from "../../config/config";
-
-const stripe = require("stripe")(config.stripeSecKey);
+import Cart from "../../core/entities/Cart";
+import GestionDelCarrito from "../../core/usecases/client/CarritoDelClient";
+import PersistenciaDeLibros from "../../services/database/adapters/PersistenciaDeLibros";
+import PagoStripe from "../../services/payment/adapters/PagoStripe";
+import { BookConverter } from "../tools/casts";
 
 export default class PaymentController {
 	public getPaymentKey(req: Request, res: Response) {
@@ -20,21 +22,23 @@ export default class PaymentController {
 		}
 	}
 
-	public async makePayment(req: Request, res: Response) {
+	public async processPayment(req: Request, res: Response) {
 		try {
-			const { amount, paymentMethodType }: { amount: number; paymentMethodType: string } = req.body;
+			const books = BookConverter.jsonToBuyBooks(req);
+			if (books.length <= 0) return res.status(400).json({ msg: "Requested no books to buy!" });
 
-			// Create a PaymentIntent with the order amount and currency.
-			const params: Stripe.PaymentIntentCreateParams = {
-				amount,
-				currency: "usd",
-				payment_method_types: [paymentMethodType],
-			};
+			// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+			const resultado: any = await GestionDelCarrito.pagarCarritoEnCaja(new PersistenciaDeLibros(), new PagoStripe(), new Cart(books));
+			if (resultado === undefined || resultado.payment === undefined) return res.status(500).json({ msg: "Payment service unavailable!" });
 
-			const paymentIntent: Stripe.PaymentIntent = await stripe.paymentIntents.create(params);
-
-			// Send publishable key and PaymentIntent client_secret to client.
-			res.status(200).json({ clientSecret: paymentIntent.client_secret });
+			// Send PaymentIntent client_secret to client.
+			return res
+				.status(200)
+				.cookie("sbk", resultado.payment, {
+					expires: new Date(Date.now() + 300),
+					httpOnly: true,
+				})
+				.json(resultado.boughtBooks);
 		} catch (error) {
 			console.error(error);
 			return res.status(500).json({ msg: "Server internal error!" });

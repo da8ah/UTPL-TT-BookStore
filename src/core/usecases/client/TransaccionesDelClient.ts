@@ -2,55 +2,21 @@ import crypto from "crypto";
 import Card from "../../entities/Card";
 import Cart from "../../entities/Cart";
 import Client from "../../entities/Client";
-import ToBuyBook from "../../entities/ToBuyBook";
-import TransactionFactory from "../../entities/TransactionFactory";
-import IPago from "../../ports/IPago";
-import IPersistenciaClient from "../../ports/persistencia/IPersistenciaClient";
-import IPersistenciaLibro from "../../ports/persistencia/IPersistenciaLibro";
-import IPersistenciaTransacciones from "../../ports/persistencia/IPersistenciaTransacciones";
-import GestionDeLibros from "../admin/GestionDeLibros";
 import Transaction from "../../entities/Transaction";
+import TransactionFactory from "../../entities/TransactionFactory";
+import IPersistenciaClient from "../../ports/persistencia/IPersistenciaClient";
+import IPersistenciaTransacciones from "../../ports/persistencia/IPersistenciaTransacciones";
 
 export default class TransaccionesDelClient {
-	public static pagarCarrito(iPago: IPago, cart: Cart): Promise<boolean> {
-		return iPago.procesarPago(cart);
-	}
-
 	public static async registrarTransaccion(
 		iPersistenciaClient: IPersistenciaClient,
-		iPersistenciaLibro: IPersistenciaLibro,
 		iPersistenciaTransacciones: IPersistenciaTransacciones,
 		card: Card,
 		client: Client,
 		cart: Cart,
 	): Promise<Transaction[]> {
 		try {
-			// 1. RESTAR LIBROS DEL STOCK DISPONIBLE
-			const boughtBooks: ToBuyBook[] = [];
-			for (const toBuyBook of cart.getToBuyBooks()) {
-				const stockBook = await iPersistenciaLibro.buscarUnLibroPorISBN(toBuyBook.getIsbn());
-				if (stockBook) {
-					// CONTINUAR SI ALGÚN LIBRO NO SE ACTUALIZA
-					try {
-						if (stockBook.getStock() >= toBuyBook.getCant() && toBuyBook.getCant() > 0) {
-							stockBook.setStock(stockBook.getStock() - toBuyBook.getCant());
-							// Posible Error
-							if (await GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook)) boughtBooks.push(toBuyBook);
-						} else if (stockBook.getStock() < toBuyBook.getCant() && stockBook.getStock() > 0 && toBuyBook.getCant() > 0) {
-							toBuyBook.setCant(stockBook.getStock());
-							stockBook.setStock(0);
-							// Posible Error
-							if (await GestionDeLibros.actualizarLibro(iPersistenciaLibro, stockBook)) boughtBooks.push(toBuyBook);
-						}
-					} catch (error) {
-						console.error(error);
-					}
-				}
-			}
-			if (boughtBooks.length === 0) return []; // if (boughtBooks = empty) return []
-			cart.setToBuyBooks(boughtBooks);
-
-			// 2. REGISTRAR NUEVA TRANSACCIÓN
+			// 1. REGISTRAR NUEVA TRANSACCIÓN
 			const transaction = new TransactionFactory().createTransaction();
 			transaction.setId(crypto.randomUUID());
 			transaction.setCardNumber(card.getCardNumber());
@@ -63,10 +29,10 @@ export default class TransaccionesDelClient {
 			transaction.setCart(cart);
 			if (!(await iPersistenciaTransacciones.guardarTransaccionDeClient(transaction))) throw Error("Transaction was not saved!");
 
-			// 3. AGREGAR TRANSACCIÓN AL CLIENT
+			// 2. AGREGAR TRANSACCIÓN AL CLIENT
 			if (!(await iPersistenciaClient.agregarTransaction(new Client(client.getUser(), "", "", "", ""), transaction))) throw Error("Transaction saved but is unrelated to the Client!");
 
-			// 4. RETORNAR CLIENT CON TRANSACCIONES ACTUALIZADAS
+			// 3. RETORNAR CLIENT CON TRANSACCIONES ACTUALIZADAS
 			return this.listarMisTransacciones(iPersistenciaTransacciones, client);
 		} catch (error) {
 			console.error(error);

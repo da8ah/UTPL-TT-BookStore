@@ -1,5 +1,4 @@
-import Cart from "../entities/Cart";
-
 export default interface IPago {
-	procesarPago(cart: Cart): Promise<boolean>;
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	procesarPago(amount: number): Promise<any>;
 }

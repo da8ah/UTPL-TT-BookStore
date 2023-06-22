@@ -179,6 +179,19 @@ export class BookConverter {
 		// NewStockBook with all Attrs
 		return new StockBook(isbn, imgRef, title, author, releaseDate, createdDate, description, grossPricePerUnit, inOffer, discountPercentage, hasIva, stock, visible, recommended, bestSeller, recent);
 	}
+
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	public static jsonToBuyBooks(req: any): ToBuyBook[] {
+		const books: ToBuyBook[] = [];
+
+		req.body.map(
+			// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+			(book: any) =>
+				books.push(new ToBuyBook(book.isbn, book.imgRef, book.title, book.author, book.releaseDate, book.grossPricePerUnit, book.inOffer, book.discountPercentage, book.hasIva, book.cant)),
+		);
+
+		return books;
+	}
 }
 
 export enum TransactionEnum {

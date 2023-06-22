@@ -4,7 +4,6 @@ import Cart from "../../core/entities/Cart";
 import Client from "../../core/entities/Client";
 import TransaccionesDelClient from "../../core/usecases/client/TransaccionesDelClient";
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
-import PersistenciaDeLibros from "../../services/database/adapters/PersistenciaDeLibros";
 import PersistenciaDeTransacciones from "../../services/database/adapters/PersistenciaDeTransacciones";
 import { TransactionConverter } from "../tools/casts";
 
@@ -16,7 +15,6 @@ export default class TransactionsController {
 			if (books !== undefined) {
 				const resultado = await TransaccionesDelClient.registrarTransaccion(
 					new PersistenciaDeClient(),
-					new PersistenciaDeLibros(),
 					new PersistenciaDeTransacciones(),
 					new Card("", transactionReturned.getCardNumber(), "", ""),
 					new Client(transactionReturned.getUser(), transactionReturned.getName(), transactionReturned.getEmail(), transactionReturned.getMobile(), ""),
