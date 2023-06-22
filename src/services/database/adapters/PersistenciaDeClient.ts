@@ -1,10 +1,10 @@
-import { ClientConverter } from "../../../app/tools/casts";
+import { ClientConverter } from "../../../utils/json.casts";
 import BillingInfo from "../../../core/entities/BillingInfo";
 import Card from "../../../core/entities/Card";
 import Client from "../../../core/entities/Client";
 import Transaction from "../../../core/entities/Transaction";
 import IPersistenciaClient from "../../../core/ports/persistencia/IPersistenciaClient";
-import { ClientCaster } from "../models/ClassCaster";
+import { ClientCaster } from "../../../utils/db.model.casts";
 import ClientModel, { IClientModel } from "../models/ClientModel";
 
 export default class PersistenciaDeClient implements IPersistenciaClient {

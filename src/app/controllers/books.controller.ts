@@ -3,8 +3,8 @@ import StockBook from "../../core/entities/StockBook";
 import GestionDeLibros from "../../core/usecases/admin/GestionDeLibros";
 import GestionDeInicio from "../../core/usecases/GestionDeInicio";
 import PersistenciaDeLibros from "../../services/database/adapters/PersistenciaDeLibros";
-import { BookConverter } from "../tools/casts";
-import { InputValidator, patterns } from "../tools/validations";
+import { BookConverter } from "../../utils/json.casts";
+import { InputValidator, patterns } from "../../utils/validations";
 
 export default class BooksController {
 	public async createBook(req: Request, res: Response) {

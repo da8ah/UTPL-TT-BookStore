@@ -3,7 +3,7 @@ import Client from "../../../core/entities/Client";
 import Transaction from "../../../core/entities/Transaction";
 import IPersistenciaTransacciones from "../../../core/ports/persistencia/IPersistenciaTransacciones";
 import CardTransactionModel, { ICardTransactionModel } from "../models/CardTransactionModel";
-import { TransactionCaster } from "../models/ClassCaster";
+import { TransactionCaster } from "../../../utils/db.model.casts";
 import ClientModel from "../models/ClientModel";
 
 export default class PersistenciaDeTransacciones implements IPersistenciaTransacciones {

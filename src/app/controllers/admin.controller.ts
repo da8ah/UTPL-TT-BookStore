@@ -6,8 +6,8 @@ import GestionDeTransacciones from "../../core/usecases/admin/GestionDeTransacci
 import config from "../../config/config";
 import PersistenciaDeAdmin from "../../services/database/adapters/PersistenciaDeAdmin";
 import PersistenciaDeTransacciones from "../../services/database/adapters/PersistenciaDeTransacciones";
-import { InputValidator } from "../tools/validations";
-import { AdminConverter } from "../tools/casts";
+import { InputValidator } from "../../utils/validations";
+import { AdminConverter } from "../../utils/json.casts";
 
 export default class AdminController {
 	private static createToken(admin: Admin) {

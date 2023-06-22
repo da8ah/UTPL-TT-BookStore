@@ -4,8 +4,8 @@ import Card from "../../core/entities/Card";
 import Client from "../../core/entities/Client";
 import GestionDeCuentaClient from "../../core/usecases/client/GestionDeCuentaClient";
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
-import { ClientConverter } from "../tools/casts";
-import { InputValidator } from "../tools/validations";
+import { ClientConverter } from "../../utils/json.casts";
+import { InputValidator } from "../../utils/validations";
 
 export default class ClientController {
 	private static decodeToken(authorization: string | undefined) {

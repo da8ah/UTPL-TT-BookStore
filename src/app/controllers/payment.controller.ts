@@ -4,7 +4,7 @@ import Cart from "../../core/entities/Cart";
 import GestionDelCarrito from "../../core/usecases/client/CarritoDelClient";
 import PersistenciaDeLibros from "../../services/database/adapters/PersistenciaDeLibros";
 import PagoStripe from "../../services/payment/adapters/PagoStripe";
-import { BookConverter } from "../tools/casts";
+import { BookConverter } from "../../utils/json.casts";
 
 export default class PaymentController {
 	public getPaymentKey(req: Request, res: Response) {

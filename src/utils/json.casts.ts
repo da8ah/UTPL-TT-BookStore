@@ -1,11 +1,11 @@
-import Admin from "../../core/entities/Admin";
-import BillingInfo from "../../core/entities/BillingInfo";
-import Card from "../../core/entities/Card";
-import { CardTransaction } from "../../core/entities/CardTransaction";
-import Cart from "../../core/entities/Cart";
-import Client from "../../core/entities/Client";
-import StockBook from "../../core/entities/StockBook";
-import ToBuyBook from "../../core/entities/ToBuyBook";
+import Admin from "../core/entities/Admin";
+import BillingInfo from "../core/entities/BillingInfo";
+import Card from "../core/entities/Card";
+import { CardTransaction } from "../core/entities/CardTransaction";
+import Cart from "../core/entities/Cart";
+import Client from "../core/entities/Client";
+import StockBook from "../core/entities/StockBook";
+import ToBuyBook from "../core/entities/ToBuyBook";
 
 export enum AdminEnum {
 	USER = "user",

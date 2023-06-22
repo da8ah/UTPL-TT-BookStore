@@ -1,7 +1,7 @@
-import { BookConverter } from "../../../app/tools/casts";
+import { BookConverter } from "../../../utils/json.casts";
 import StockBook from "../../../core/entities/StockBook";
 import IPersistenciaLibro from "../../../core/ports/persistencia/IPersistenciaLibro";
-import { BookCaster } from "../models/ClassCaster";
+import { BookCaster } from "../../../utils/db.model.casts";
 import StockBookModel, { IStockBookModel } from "../models/StockBookModel";
 
 export default class PersistenciaDeLibros implements IPersistenciaLibro {

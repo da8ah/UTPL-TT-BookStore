@@ -1,6 +1,6 @@
-import BillingInfo from "../../core/entities/BillingInfo";
-import StockBook from "../../core/entities/StockBook";
-import User from "../../core/entities/User";
+import BillingInfo from "../core/entities/BillingInfo";
+import StockBook from "../core/entities/StockBook";
+import User from "../core/entities/User";
 
 export const patterns = {
 	StockBook: {

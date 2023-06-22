@@ -5,7 +5,7 @@ import Client from "../../core/entities/Client";
 import TransaccionesDelClient from "../../core/usecases/client/TransaccionesDelClient";
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
 import PersistenciaDeTransacciones from "../../services/database/adapters/PersistenciaDeTransacciones";
-import { TransactionConverter } from "../tools/casts";
+import { TransactionConverter } from "../../utils/json.casts";
 
 export default class TransactionsController {
 	public async createCardTransaction(req: Request, res: Response) {

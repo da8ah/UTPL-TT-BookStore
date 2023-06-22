@@ -4,8 +4,8 @@ import Client from "../../core/entities/Client";
 import GestionDeInicio from "../../core/usecases/GestionDeInicio";
 import config from "../../config/config";
 import { default as PersistenciaDeClient, default as PersistenciaDeCuentas } from "../../services/database/adapters/PersistenciaDeClient";
-import { ClientConverter } from "../tools/casts";
-import { InputValidator } from "../tools/validations";
+import { ClientConverter } from "../../utils/json.casts";
+import { InputValidator } from "../../utils/validations";
 
 export default class AuthController {
 	private static createToken(client: Client) {

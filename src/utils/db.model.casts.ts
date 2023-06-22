@@ -1,15 +1,15 @@
-import Admin from "../../../core/entities/Admin";
-import BillingInfo from "../../../core/entities/BillingInfo";
-import Card from "../../../core/entities/Card";
-import { CardTransaction } from "../../../core/entities/CardTransaction";
-import Cart from "../../../core/entities/Cart";
-import Client from "../../../core/entities/Client";
-import StockBook from "../../../core/entities/StockBook";
-import ToBuyBook from "../../../core/entities/ToBuyBook";
-import AdminModel, { IAdminModel } from "./AdminModel";
-import CardTransactionModel, { ICardTransactionModel } from "./CardTransactionModel";
-import ClientModel, { IBillingInfoModel, ICardModel, IClientModel } from "./ClientModel";
-import StockBookModel, { IStockBookModel } from "./StockBookModel";
+import Admin from "../core/entities/Admin";
+import BillingInfo from "../core/entities/BillingInfo";
+import Card from "../core/entities/Card";
+import { CardTransaction } from "../core/entities/CardTransaction";
+import Cart from "../core/entities/Cart";
+import Client from "../core/entities/Client";
+import StockBook from "../core/entities/StockBook";
+import ToBuyBook from "../core/entities/ToBuyBook";
+import AdminModel, { IAdminModel } from "../services/database/models/AdminModel";
+import CardTransactionModel, { ICardTransactionModel } from "../services/database/models/CardTransactionModel";
+import ClientModel, { IBillingInfoModel, ICardModel, IClientModel } from "../services/database/models/ClientModel";
+import StockBookModel, { IStockBookModel } from "../services/database/models/StockBookModel";
 
 export class AdminCaster {
 	public static adminToModel(admin: Admin): IAdminModel {

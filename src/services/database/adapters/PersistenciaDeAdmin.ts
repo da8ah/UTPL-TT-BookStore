@@ -1,7 +1,7 @@
 import Admin from "../../../core/entities/Admin";
 import IPersistenciaCuenta from "../../../core/ports/persistencia/IPersistenciaCuenta";
 import AdminModel, { IAdminModel } from "../models/AdminModel";
-import { AdminCaster } from "../models/ClassCaster";
+import { AdminCaster } from "../../../utils/db.model.casts";
 
 export default class PersistenciaDeAdmin implements IPersistenciaCuenta {
 	public async comprobarCuentaDuplicada(admin: Admin): Promise<boolean> {
