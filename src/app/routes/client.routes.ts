@@ -19,22 +19,22 @@ export const API_PATH = "/api/clients";
 // Ingreso con Token
 clientRouter.get(`${API_PATH}/signin`, passportAuth, homeController.getClientWithToken);
 // Actualizar Client
-clientRouter.put(`${API_PATH}/:user`, passportAuth, clientController.updateClient);
+clientRouter.put(`${API_PATH}/:user`, clientController.authorizationVerification, passportAuth, clientController.updateClient);
 // Actualizar BillingInfo
-clientRouter.put(`${API_PATH}/:user/billing`, passportAuth, clientController.updateBillingInfo);
+clientRouter.put(`${API_PATH}/:user/billing`, clientController.authorizationVerification, passportAuth, clientController.updateBillingInfo);
 // Agregar Card
-clientRouter.put(`${API_PATH}/:user/cards`, passportAuth, clientController.addCard);
+clientRouter.put(`${API_PATH}/:user/cards`, clientController.authorizationVerification, passportAuth, clientController.addCard);
 // Eliminar Card
-clientRouter.delete(`${API_PATH}/:user/cards`, passportAuth, clientController.rmCard);
+clientRouter.delete(`${API_PATH}/:user/cards`, clientController.authorizationVerification, passportAuth, clientController.rmCard);
 // Eliminar Client
-clientRouter.delete(`${API_PATH}/:user`, passportAuth, clientController.deleteClient);
+clientRouter.delete(`${API_PATH}/:user`, clientController.authorizationVerification, passportAuth, clientController.deleteClient);
 // Solicitar Payment Credentials
-clientRouter.get(`${API_PATH}/payments`, passportAuth, paymentController.getPaymentKey);
+clientRouter.get(`${API_PATH}/:user/payments`, clientController.authorizationVerification, passportAuth, paymentController.getPaymentKey);
 // Registrar Payment
-clientRouter.post(`${API_PATH}/payments`, passportAuth, paymentController.makePayment);
+clientRouter.post(`${API_PATH}/:user/payments`, clientController.authorizationVerification, passportAuth, paymentController.makePayment);
 // Registrar Transaction
-clientRouter.post(`${API_PATH}/transactions`, passportAuth, transactionsController.createCardTransaction);
+clientRouter.post(`${API_PATH}/:user/transactions`, clientController.authorizationVerification, passportAuth, transactionsController.createCardTransaction);
 // Traer todas las Transaction de un Client
-clientRouter.get(`${API_PATH}/transactions/:user`, passportAuth, transactionsController.retrieveTransacions);
+clientRouter.get(`${API_PATH}/:user/transactions`, clientController.authorizationVerification, passportAuth, transactionsController.retrieveTransacions);
 
 export default clientRouter;

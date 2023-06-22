@@ -22,7 +22,7 @@ Content-Type: application/json
     "name": "Danilo Ochoa Hidalgo",
     "email": "danilo.ochoa.hidalgo@email.com",
     "mobile": "+593000000001",
-    "password": "tibernuncamuere",
+    "password": "da8ah.tiber",
     "billingInfo": {
         "toWhom": "Danilo Ochoa Hidalgo",
         "ci": "1000000001",
@@ -77,15 +77,15 @@ Content-Type: application/json
 }
 
 ### TRANSACTIONS
-@payment={{clients}}/payments
-@transactions={{clients}}/transactions
+@payment={{clients}}/{{user}}/payments
+@transactions={{clients}}/{{user}}/transactions
 
 ### GET STRIPE PUBLIC KEY
 GET {{payment}}
 Authorization: {{auth}}
 
 ### RETRIEVE ALL TRANSACTIONS OF A CLIENT
-GET {{transactions}}/{{user}}
+GET {{transactions}}
 Authorization: {{auth}}
 
 ### CREATE NEW TRANSACTION AND ADD TO THE CLIENT

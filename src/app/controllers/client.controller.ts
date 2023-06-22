@@ -1,13 +1,27 @@
-import { Request, Response } from "express";
-import BillingInfo from "../../core/entities/BillingInfo";
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import Card from "../../core/entities/Card";
 import Client from "../../core/entities/Client";
 import GestionDeCuentaClient from "../../core/usecases/client/GestionDeCuentaClient";
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
-import { InputValidator } from "../tools/validations";
 import { ClientConverter } from "../tools/casts";
-import Card from "../../core/entities/Card";
+import { InputValidator } from "../tools/validations";
 
 export default class ClientController {
+	private static decodeToken(authorization: string | undefined) {
+		let tokenDecoded = null;
+		if (authorization !== undefined) tokenDecoded = jwt.decode(authorization);
+		return JSON.parse(JSON.stringify(tokenDecoded));
+	}
+
+	public authorizationVerification(req: Request, res: Response, next: NextFunction) {
+		const tokenDecoded = ClientController.decodeToken(req?.headers.authorization);
+		if (!tokenDecoded) return res.status(404).redirect("/signin");
+		const user = tokenDecoded?.user;
+		if (!user || user === undefined || req.params.user === undefined || user.toLowerCase() !== req.params.user.toLowerCase()) return res.status(401).send();
+		next();
+	}
+
 	public async updateClient(req: Request, res: Response) {
 		try {
 			const clientToSearch = new Client(req.params.user, "", "", "", "");

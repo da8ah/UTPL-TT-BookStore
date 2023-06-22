@@ -142,7 +142,7 @@ const clientSchema = new Schema(
 	},
 );
 
-cardSchema.pre<ICardModel>("findOneAndUpdate", async function (next) {
+cardSchema.pre<ICardModel>("save", async function (next) {
 	const card = this;
 	console.log(card);
 
