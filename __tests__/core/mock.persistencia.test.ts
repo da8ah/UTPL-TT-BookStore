@@ -9,6 +9,7 @@ import IPersistenciaCuenta from "../../src/core/ports/persistencia/IPersistencia
 import IPersistenciaLibro from "../../src/core/ports/persistencia/IPersistenciaLibro";
 
 import { admin as adminTest } from "./core.usecases.test";
+import { client as clientTest } from "./core.usecases.test";
 
 export const iPersistenciaCuenta: IPersistenciaCuenta = {
 	guardarCuentaNueva: async (admin: Admin): Promise<boolean> => {
@@ -54,7 +55,7 @@ export const iPersistenciaClient: IPersistenciaClient = {
 	},
 	obtenerCuenta: async (client: Client): Promise<Client | null> => {
 		if (client.getUser() === "") return null;
-		return client;
+		return clientTest;
 	},
 	comprobarUserPassword: async (client: Client): Promise<boolean> => {
 		if (client.getUser() === "") return false;
@@ -83,14 +84,51 @@ export const iPersistenciaClient: IPersistenciaClient = {
 };
 
 export const iPersistenciaLibro: IPersistenciaLibro = {
-	buscarUnLibroPorISBN: function (isbn: string): Promise<StockBook | null> {
-		throw new Error("Function not implemented.");
+	buscarUnLibroPorISBN: async (isbn: string): Promise<StockBook | null> => {
+		if (isbn === "9780141988511") return new StockBook(
+			"9780141988511",
+			"https://azure.blob.url.jpg",
+			"12 Rules for Life: An Antidote to Chaos",
+			"Jordan Peterson",
+			"12/01/2018",
+			"10/01/2023",
+			"JBP's BestSeller",
+			25,
+			true,
+			10,
+			false,
+			100,
+			true,
+			true,
+			true,
+			false,
+		)
+		return null
 	},
-	guardarLibroNuevo: function (stockBook: StockBook): Promise<boolean> {
-		throw new Error("Function not implemented.");
+	guardarLibroNuevo: async (stockBook: StockBook): Promise<boolean> => {
+		return true;
 	},
-	obtenerLibrosEnStock: function (): Promise<StockBook[]> {
-		throw new Error("Function not implemented.");
+	obtenerLibrosEnStock: async (): Promise<StockBook[]> => {
+		return [
+			new StockBook(
+				"9780141988511",
+				"https://azure.blob.url.jpg",
+				"12 Rules for Life: An Antidote to Chaos",
+				"Jordan Peterson",
+				"12/01/2018",
+				"10/01/2023",
+				"JBP's BestSeller",
+				25,
+				true,
+				10,
+				false,
+				100,
+				true,
+				true,
+				true,
+				false,
+			),
+		];
 	},
 	obtenerLibrosVisibles: async (): Promise<StockBook[]> => {
 		return [
@@ -114,10 +152,10 @@ export const iPersistenciaLibro: IPersistenciaLibro = {
 			),
 		];
 	},
-	actualizarLibro: function (stockBook: StockBook, originalStockBookToChangeISBN?: StockBook | undefined): Promise<boolean> {
-		throw new Error("Function not implemented.");
+	actualizarLibro: async (stockBook: StockBook, originalStockBookToChangeISBN?: StockBook | undefined): Promise<boolean> => {
+		return true;
 	},
-	eliminarLibro: function (stockBook: StockBook): Promise<boolean> {
-		throw new Error("Function not implemented.");
+	eliminarLibro: async (stockBook: StockBook): Promise<boolean> => {
+		return true;
 	},
 };
