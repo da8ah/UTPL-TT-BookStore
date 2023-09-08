@@ -30,6 +30,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 	public async obtenerCuenta(client: Client): Promise<Client | null> {
 		try {
 			const clientFound: IClientModel | null = (await ClientModel.findOne({ user: client.getUser().toLowerCase() })) || null;
+			console.log(clientFound)
 			return clientFound ? ClientCaster.modelToClient(clientFound) : null;
 		} catch (error) {
 			console.error(error);

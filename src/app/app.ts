@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import limitter from "express-rate-limit";
 import morgan from "morgan";
 import passport from "passport";
 import * as passportMiddleware from "./middlewares/passport";
@@ -13,6 +14,10 @@ const app = express();
 
 // Settings
 app.set("port", config.PORT);
+app.use(limitter({
+    windowMs: 5000,
+    max: 5
+}));
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

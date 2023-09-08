@@ -1,7 +1,7 @@
 import Cart from "./Cart";
 import Transaction from "./Transaction";
 
-export class CardTransaction extends Transaction {
+export default class CardTransaction extends Transaction {
 	private cardNumber: string;
 
 	constructor(id = "", cardNumber = "", user = "", name = "", email = "", mobile = "", date = "", payment = 0, cart?: Cart) {

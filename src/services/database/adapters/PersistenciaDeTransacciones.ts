@@ -1,4 +1,4 @@
-import { CardTransaction } from "../../../core/entities/CardTransaction";
+import CardTransaction from "../../../core/entities/CardTransaction";
 import Client from "../../../core/entities/Client";
 import Transaction from "../../../core/entities/Transaction";
 import IPersistenciaTransacciones from "../../../core/ports/persistencia/IPersistenciaTransacciones";

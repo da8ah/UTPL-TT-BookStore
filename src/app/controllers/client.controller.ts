@@ -6,6 +6,7 @@ import GestionDeCuentaClient from "../../core/usecases/client/GestionDeCuentaCli
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
 import { ClientConverter } from "../../utils/json.casts";
 import { InputValidator } from "../../utils/validations";
+import GestionDeInicio from "../../core/usecases/GestionDeInicio";
 
 export default class ClientController {
 	private static decodeToken(authorization: string | undefined) {

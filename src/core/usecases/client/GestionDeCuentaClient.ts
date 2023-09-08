@@ -4,7 +4,8 @@ import Client from "../../entities/Client";
 import IPersistenciaClient from "../../ports/persistencia/IPersistenciaClient";
 
 export default class GestionDeCuentaClient {
-	public static actualizarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client, originalClientToChangeUsername?: Client): Promise<boolean> {
+	public static async actualizarCuenta(iPersistenciaClient: IPersistenciaClient, client: Client, originalClientToChangeUsername?: Client): Promise<boolean> {
+		if (!await iPersistenciaClient.comprobarUserPassword(new Client(client.getUser(), "", "", "", client.getPassword()))) return false
 		return originalClientToChangeUsername !== undefined ? iPersistenciaClient.actualizarCuenta(client, originalClientToChangeUsername) : iPersistenciaClient.actualizarCuenta(client);
 	}
 

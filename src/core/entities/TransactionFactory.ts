@@ -1,4 +1,4 @@
-import { CardTransaction } from "./CardTransaction";
+import CardTransaction from "./CardTransaction";
 
 export default class TransactionFactory {
 	public createTransaction(transactionType: "card" = "card"): CardTransaction {

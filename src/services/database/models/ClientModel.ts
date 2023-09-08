@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Query } from "mongoose";
 import bcrypt from "bcrypt";
 import Client from "../../../core/entities/Client";
 
@@ -163,13 +163,25 @@ cardSchema.methods.compareCode = async function (code: string): Promise<boolean>
 	return await bcrypt.compare(code, this.code);
 };
 
-clientSchema.pre<IClientModel>("save", async function (next) {
-	const user = this;
-	if (!user.isModified("password")) return next();
+clientSchema.pre(/^(save|findOneAndUpdate)$/, async function (next) {
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	const user: any = this;
 
-	const salt = await bcrypt.genSalt(10);
-	const hash = await bcrypt.hash(user.password, salt);
-	user.password = hash;
+	if (user.password) {
+		if (user.isModified('password')) {
+			const salt = await bcrypt.genSalt(10);
+			const hash = await bcrypt.hash(user.password, salt);
+			user.password = hash
+		}
+		return next();
+	}
+
+	const { password } = user.getUpdate()
+	if (password) {
+		const salt = await bcrypt.genSalt(10);
+		const hash = await bcrypt.hash(password, salt);
+		user.getUpdate().password = hash
+	}
 	next();
 });
 
