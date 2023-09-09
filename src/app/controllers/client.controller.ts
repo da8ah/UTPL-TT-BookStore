@@ -6,7 +6,6 @@ import GestionDeCuentaClient from "../../core/usecases/client/GestionDeCuentaCli
 import PersistenciaDeClient from "../../services/database/adapters/PersistenciaDeClient";
 import { ClientConverter } from "../../utils/json.casts";
 import { InputValidator } from "../../utils/validations";
-import GestionDeInicio from "../../core/usecases/GestionDeInicio";
 
 export default class ClientController {
 	private static decodeToken(authorization: string | undefined) {
@@ -28,8 +27,6 @@ export default class ClientController {
 			const clientToSearch = new Client(req.params.user, "", "", "", "");
 			const clientToUpdate = ClientConverter.jsonToClient(req);
 			if (!InputValidator.validateUser(clientToUpdate)) return res.status(400).json({ msg: "No valid input!" });
-			if (!clientToUpdate.getBillingInfo() || clientToUpdate.getBillingInfo() === undefined || !InputValidator.validateBillingInfo(clientToUpdate.getBillingInfo()))
-				return res.status(400).json({ msg: "No valid input!" });
 
 			const resultado = await GestionDeCuentaClient.actualizarCuenta(new PersistenciaDeClient(), clientToUpdate);
 			if (!resultado) return res.status(404).json({ msg: `${clientToSearch.getUser()} was not found!` });
@@ -47,8 +44,8 @@ export default class ClientController {
 			if (!billingInfo || billingInfo === undefined || !InputValidator.validateBillingInfo(billingInfo)) return res.status(400).json({ msg: "No valid input!" });
 
 			const resultado = await GestionDeCuentaClient.actualizarBillingInfo(new PersistenciaDeClient(), client, billingInfo);
-			if (!resultado) return res.status(404).json({ msg: "Billing info was not updated!" });
-			return res.status(200).json({ msg: "Billing info updated!" });
+			if (!resultado) return res.status(404).json({ msg: `${client.getUser()} was not found!` });
+			return res.status(200).json({ msg: `${client.getUser()} updated!` });
 		} catch (error) {
 			console.error(error);
 			return res.status(500).json({ msg: "Server internal error!" });

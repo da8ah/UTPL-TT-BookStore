@@ -66,12 +66,12 @@ export class ClientConverter {
 	public static billingInfoToJSON(billingInfo: BillingInfo): JSON {
 		// rome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const json: any = {};
-		if (billingInfo.getToWhom() !== undefined) json[BillingInfoEnum.TO_WHOM] = billingInfo.getToWhom();
-		if (billingInfo.getCi() !== undefined) json[BillingInfoEnum.CI] = billingInfo.getCi();
-		if (billingInfo.getProvincia() !== undefined) json[BillingInfoEnum.PROVINCIA] = billingInfo.getProvincia();
-		if (billingInfo.getCiudad() !== undefined) json[BillingInfoEnum.CIUDAD] = billingInfo.getCiudad();
-		if (billingInfo.getNumCasa() !== undefined) json[BillingInfoEnum.NUM_CASA] = billingInfo.getNumCasa();
-		if (billingInfo.getCalles() !== undefined) json[BillingInfoEnum.CALLES] = billingInfo.getCalles();
+		if (billingInfo.getToWhom() !== "") json[BillingInfoEnum.TO_WHOM] = billingInfo.getToWhom();
+		if (billingInfo.getCi() !== "") json[BillingInfoEnum.CI] = billingInfo.getCi();
+		if (billingInfo.getProvincia() !== "") json[BillingInfoEnum.PROVINCIA] = billingInfo.getProvincia();
+		if (billingInfo.getCiudad() !== "") json[BillingInfoEnum.CIUDAD] = billingInfo.getCiudad();
+		if (billingInfo.getNumCasa() !== "") json[BillingInfoEnum.NUM_CASA] = billingInfo.getNumCasa();
+		if (billingInfo.getCalles() !== "") json[BillingInfoEnum.CALLES] = billingInfo.getCalles();
 		return json;
 	}
 
@@ -88,19 +88,10 @@ export class ClientConverter {
 	public static clientToJSON(client: Client): JSON {
 		// rome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const json: any = {};
-		if (client.getUser() !== undefined) json[ClientEnum.USER] = client.getUser().toLowerCase();
-		if (client.getName() !== undefined) json[ClientEnum.NAME] = client.getName();
-		if (client.getEmail() !== undefined) json[ClientEnum.EMAIL] = client.getEmail();
-		if (client.getMobile() !== undefined) json[ClientEnum.MOBILE] = client.getMobile();
-		if (client.getPassword() !== undefined) json[ClientEnum.PASSWORD] = client.getPassword();
-
-		const billingInfo = client.getBillingInfo();
-		if (billingInfo !== undefined) json[ClientEnum.BILLING_INFO] = this.billingInfoToJSON(billingInfo);
-		const cards = client.getCards();
-		if (cards !== undefined) json[ClientEnum.CARDS] = cards.map((card) => this.cardToJSON(card));
-		const transactions = client.getTransactions();
-		if (transactions !== undefined) json[ClientEnum.TRANSACTIONS] = transactions.map((transaction) => TransactionConverter.cardTransactionToJSON(transaction as CardTransaction));
-
+		if (client.getUser() !== "") json[ClientEnum.USER] = client.getUser().toLowerCase();
+		if (client.getName() !== "") json[ClientEnum.NAME] = client.getName();
+		if (client.getEmail() !== "") json[ClientEnum.EMAIL] = client.getEmail();
+		if (client.getMobile() !== "") json[ClientEnum.MOBILE] = client.getMobile();
 		return json;
 	}
 
@@ -194,26 +185,7 @@ export class BookConverter {
 	}
 }
 
-export enum TransactionEnum {
-	ID = "id",
-	CARD_NUMBER = "cardNumber",
-	DATE = "date",
-	PAYMENT = "payment",
-	CART = "cart",
-}
-
 export class TransactionConverter {
-	static cardTransactionToJSON(cardTransaction: CardTransaction): JSON {
-		// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const json: any = {};
-		if (cardTransaction.getId() !== undefined) json[TransactionEnum.ID] = cardTransaction.getId();
-		if (cardTransaction.getCardNumber() !== undefined) json[TransactionEnum.CARD_NUMBER] = cardTransaction.getCardNumber();
-		if (cardTransaction.getDate() !== undefined) json[TransactionEnum.DATE] = cardTransaction.getDate();
-		if (cardTransaction.getPayment() !== undefined) json[TransactionEnum.PAYMENT] = cardTransaction.getPayment();
-		if (cardTransaction.getCart() !== undefined) json[TransactionEnum.CART] = JSON.parse(JSON.stringify(cardTransaction.getCart()));
-		return json;
-	}
-
 	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
 	public static jsonToCardTransaction(req: any): CardTransaction {
 		const { id, cardNumber, user, name, email, mobile, date, payment, cart } = req.body;

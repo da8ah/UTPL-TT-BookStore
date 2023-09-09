@@ -10,7 +10,7 @@ export default class GestionDeCuentaClient {
 	}
 
 	public static actualizarBillingInfo(iPersistenciaClient: IPersistenciaClient, client: Client, billingInfo: BillingInfo): Promise<boolean> {
-		return iPersistenciaClient.actualizarBillingInfo(client, billingInfo);
+		return iPersistenciaClient.actualizarBillingInfo(new Client(client.getUser(), "", "", "", ""), billingInfo);
 	}
 	public static agregarCard(iPersistenciaClient: IPersistenciaClient, client: Client, card: Card): Promise<boolean> {
 		return iPersistenciaClient.agregarCard(client, card);

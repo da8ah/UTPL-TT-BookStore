@@ -21,15 +21,7 @@ Content-Type: application/json
     "name": "Danilo Ochoa Hidalgo",
     "email": "danilo.ochoa.hidalgo@email.com",
     "mobile": "+593000000001",
-    "password": "tibernuncamuere",
-    "billingInfo": {
-        "toWhom": "Danilo Ochoa Hidalgo",
-        "ci": "1000000001",
-        "provincia": "Loja",
-        "ciudad": "Loja",
-        "numCasa": "000",
-        "calles": "Principal y Secundaria"
-    }
+    "password": "tibernuncamuere"
 }
 
 ### DELETE CLIENT

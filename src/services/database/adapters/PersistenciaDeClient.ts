@@ -30,7 +30,6 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 	public async obtenerCuenta(client: Client): Promise<Client | null> {
 		try {
 			const clientFound: IClientModel | null = (await ClientModel.findOne({ user: client.getUser().toLowerCase() })) || null;
-			console.log(clientFound)
 			return clientFound ? ClientCaster.modelToClient(clientFound) : null;
 		} catch (error) {
 			console.error(error);
@@ -41,13 +40,17 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 	public async actualizarCuenta(client: Client, originalClientToChangeUsername?: Client): Promise<boolean> {
 		try {
 			if (originalClientToChangeUsername !== undefined)
-				return !!(await ClientModel.findOneAndUpdate({ user: originalClientToChangeUsername.getUser().toLowerCase() }, ClientConverter.clientToJSON(client), {
-					new: true,
-				}));
+				return !!(await ClientModel.findOneAndUpdate(
+					{ user: originalClientToChangeUsername.getUser().toLowerCase() },
+					{ $set: ClientConverter.clientToJSON(client) },
+					{ new: true }
+				));
 
-			return !!(await ClientModel.findOneAndUpdate({ user: client.getUser().toLowerCase() }, ClientConverter.clientToJSON(client), {
-				new: true,
-			}));
+			return !!(await ClientModel.findOneAndUpdate(
+				{ user: client.getUser().toLowerCase() },
+				{ $set: ClientConverter.clientToJSON(client) },
+				{ new: true }
+			));
 		} catch (error) {
 			console.error(error);
 			throw error;
@@ -59,9 +62,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 			return !!(await ClientModel.findOneAndUpdate(
 				{ user: client.getUser().toLowerCase() },
 				{ $set: { billingInfo } },
-				{
-					new: true,
-				},
+				{ new: true }
 			));
 		} catch (error) {
 			console.error(error);
@@ -74,9 +75,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 			return !!(await ClientModel.findOneAndUpdate(
 				{ user: client.getUser().toLowerCase() },
 				{ $addToSet: { cards: card } },
-				{
-					new: true,
-				},
+				{ new: true }
 			));
 		} catch (error) {
 			console.error(error);
@@ -104,9 +103,7 @@ export default class PersistenciaDeClient implements IPersistenciaClient {
 			return !!(await ClientModel.findOneAndUpdate(
 				{ user: client.getUser().toLowerCase() },
 				{ $push: { transactions: { id: transaction.getId() } } },
-				{
-					new: true,
-				},
+				{ new: true }
 			));
 		} catch (error) {
 			console.error(error);
